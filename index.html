@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ebenezer Osei — I/O Research Analyst | Jacksonville Sheriff's Office</title>
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400;500;600;700&f[]=clash-display@500;600;700&display=swap">
+
+    <style>
+        /* ===========================================
+           CSS CUSTOM PROPERTIES — JSO BRAND
+           Navy Blue & Gold institutional palette
+           =========================================== */
+        :root {
+            --navy: #002D72;
+            --navy-deep: #001a45;
+            --navy-dark: #00112e;
+            --gold: #C8A64D;
+            --gold-light: #e0c56e;
+            --gold-glow: rgba(200, 166, 77, 0.12);
+            --gold-border: rgba(200, 166, 77, 0.25);
+            --white: #ffffff;
+            --off-white: #f4f3ef;
+            --text-primary: #ffffff;
+            --text-secondary: #b8c4d8;
+            --text-muted: #7a8aa3;
+            --card-bg: rgba(255,255,255,0.04);
+            --card-bg-hover: rgba(255,255,255,0.07);
+            --border: rgba(255,255,255,0.08);
+            --success: #2ecc71;
+            --alert: #e74c3c;
+
+            --font-display: 'Clash Display', sans-serif;
+            --font-body: 'General Sans', sans-serif;
+            --title-size: clamp(1.8rem, 5vw, 4rem);
+            --h2-size: clamp(1.3rem, 3.2vw, 2.5rem);
+            --h3-size: clamp(1rem, 2vw, 1.4rem);
+            --body-size: clamp(0.78rem, 1.25vw, 1rem);
+            --small-size: clamp(0.68rem, 1vw, 0.85rem);
+            --slide-padding: clamp(1.5rem, 4vw, 5rem);
+            --content-gap: clamp(0.6rem, 1.8vw, 1.75rem);
+            --element-gap: clamp(0.25rem, 0.8vw, 0.6rem);
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration: 0.65s;
+        }
+
+        /* ===========================================
+           BASE
+           =========================================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--navy-dark);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            height: 100%;
+        }
+
+        /* ===========================================
+           SLIDE SYSTEM
+           =========================================== */
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding: var(--slide-padding);
+        }
+
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-height: 100%;
+            overflow: hidden;
+        }
+
+        /* ===========================================
+           PROGRESS BAR — GOLD
+           =========================================== */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            z-index: 1000;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        /* ===========================================
+           NAV DOTS
+           =========================================== */
+        .nav-dots {
+            position: fixed;
+            right: clamp(0.75rem, 2vw, 2rem);
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+
+        .nav-dot.active {
+            background: var(--gold);
+            box-shadow: 0 0 10px var(--gold-glow);
+            transform: scale(1.4);
+        }
+
+        /* ===========================================
+           SLIDE NUMBER
+           =========================================== */
+        .slide-number {
+            position: absolute;
+            bottom: clamp(1rem, 2vw, 2rem);
+            right: clamp(1.5rem, 3vw, 3rem);
+            font-size: var(--small-size);
+            color: var(--text-muted);
+            font-weight: 500;
+            letter-spacing: 0.05em;
+        }
+
+        /* ===========================================
+           TYPOGRAPHY
+           =========================================== */
+        .slide-label {
+            font-family: var(--font-body);
+            font-size: var(--small-size);
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: clamp(0.4rem, 1.2vw, 1rem);
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-size: var(--title-size);
+            font-weight: 600;
+            line-height: 1.08;
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            font-size: var(--h2-size);
+            font-weight: 600;
+            line-height: 1.15;
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-family: var(--font-display);
+            font-size: var(--h3-size);
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
+        p, li {
+            font-size: var(--body-size);
+            line-height: 1.55;
+            color: var(--text-secondary);
+        }
+
+        .gold { color: var(--gold); font-weight: 600; }
+        .white { color: var(--white); font-weight: 600; }
+
+        /* ===========================================
+           ANIMATIONS
+           =========================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(22px);
+            transition: opacity var(--duration) var(--ease-out-expo),
+                        transform var(--duration) var(--ease-out-expo);
+        }
+
+        .slide.visible .reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal:nth-child(1) { transition-delay: 0.05s; }
+        .reveal:nth-child(2) { transition-delay: 0.12s; }
+        .reveal:nth-child(3) { transition-delay: 0.2s; }
+        .reveal:nth-child(4) { transition-delay: 0.28s; }
+        .reveal:nth-child(5) { transition-delay: 0.36s; }
+        .reveal:nth-child(6) { transition-delay: 0.44s; }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.93);
+            transition: opacity var(--duration) var(--ease-out-expo),
+                        transform var(--duration) var(--ease-out-expo);
+        }
+
+        .slide.visible .reveal-scale {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* ===========================================
+           BACKGROUND DECORATIONS
+           =========================================== */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(200,166,77,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(200,166,77,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+        }
+
+        .bg-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.35;
+            pointer-events: none;
+        }
+
+        .gold-stripe {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--gold), transparent);
+        }
+
+        /* ===========================================
+           JSO BADGE WATERMARK
+           =========================================== */
+        .badge-watermark {
+            position: absolute;
+            right: clamp(-2rem, -3vw, -4rem);
+            bottom: clamp(-2rem, -3vw, -3rem);
+            width: clamp(200px, 30vw, 400px);
+            height: clamp(200px, 30vw, 400px);
+            opacity: 0.03;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .badge-watermark svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ===========================================
+           COMPONENTS
+           =========================================== */
+
+        /* Metric cards */
+        .metric-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+            gap: clamp(0.5rem, 1.2vw, 1rem);
+            margin-top: var(--content-gap);
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: clamp(0.7rem, 1.5vw, 1.25rem);
+            transition: border-color 0.3s ease;
+        }
+
+        .metric-card:hover { border-color: var(--gold-border); }
+
+        .metric-card.gold-accent { border-left: 3px solid var(--gold); }
+
+        .metric-value {
+            font-family: var(--font-display);
+            font-size: clamp(1.4rem, 3vw, 2.5rem);
+            font-weight: 700;
+            color: var(--gold);
+            line-height: 1.1;
+        }
+
+        .metric-value.white-val { color: var(--white); }
+        .metric-value.alert-val { color: var(--alert); }
+
+        .metric-label {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            margin-top: 0.2rem;
+            line-height: 1.3;
+        }
+
+        /* Tags */
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: clamp(0.25rem, 0.6vw, 0.5rem);
+            margin-top: var(--element-gap);
+        }
+
+        .tag {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: clamp(0.2rem, 0.5vw, 0.35rem) clamp(0.5rem, 1vw, 0.85rem);
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .tag.gold-tag {
+            border-color: var(--gold-border);
+            color: var(--gold);
+            background: var(--gold-glow);
+        }
+
+        /* Two columns */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(1rem, 3vw, 3rem);
+            margin-top: var(--content-gap);
+        }
+
+        @media (max-width: 768px) {
+            .two-col { grid-template-columns: 1fr; gap: clamp(0.5rem, 2vw, 1rem); }
+        }
+
+        .col-header {
+            font-family: var(--font-display);
+            font-size: clamp(0.8rem, 1.2vw, 1rem);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: clamp(0.3rem, 0.8vw, 0.6rem);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .col-header .bar {
+            width: 18px;
+            height: 3px;
+            border-radius: 2px;
+        }
+
+        .col-header .bar.gold-bar { background: var(--gold); }
+        .col-header .bar.navy-bar { background: var(--navy); border: 1px solid var(--text-muted); }
+
+        /* Value lists */
+        .value-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--element-gap);
+        }
+
+        .value-list li {
+            padding-left: 1.2em;
+            position: relative;
+            font-size: var(--body-size);
+            line-height: 1.45;
+        }
+
+        .value-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        /* Alignment cards */
+        .align-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(0.5rem, 1vw, 0.85rem);
+            margin-top: var(--content-gap);
+        }
+
+        @media (max-width: 768px) {
+            .align-grid { grid-template-columns: 1fr; }
+        }
+
+        .align-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: clamp(0.6rem, 1.3vw, 1.1rem);
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .align-card .label {
+            font-size: var(--small-size);
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .align-card .answer {
+            font-size: var(--body-size);
+            color: var(--text-primary);
+            font-weight: 500;
+            line-height: 1.35;
+        }
+
+        .align-card .proof {
+            font-size: var(--small-size);
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        /* Proposal card */
+        .proposal-card {
+            background: linear-gradient(135deg, rgba(0,45,114,0.4), rgba(0,26,69,0.6));
+            border: 1px solid var(--gold-border);
+            border-radius: 12px;
+            padding: clamp(1rem, 2vw, 1.75rem);
+            margin-top: var(--content-gap);
+        }
+
+        .proposal-card h3 {
+            color: var(--gold);
+            margin-bottom: clamp(0.3rem, 0.8vw, 0.6rem);
+        }
+
+        .proposal-steps {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(0.4rem, 1vw, 0.75rem);
+            margin-top: clamp(0.4rem, 1vw, 0.75rem);
+        }
+
+        @media (max-width: 600px) {
+            .proposal-steps { grid-template-columns: 1fr; }
+        }
+
+        .step {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            font-family: var(--font-display);
+            font-size: var(--body-size);
+            font-weight: 700;
+            color: var(--gold);
+            min-width: 1.5em;
+        }
+
+        .step-text {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Divider */
+        .divider {
+            width: 50px;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 2px;
+            margin: clamp(0.4rem, 1vw, 0.75rem) 0;
+        }
+
+        /* CTA box */
+        .cta-box {
+            background: linear-gradient(135deg, var(--gold-glow), rgba(0,45,114,0.3));
+            border: 1px solid var(--gold-border);
+            border-radius: 14px;
+            padding: clamp(1rem, 2.5vw, 2rem);
+            margin-top: var(--content-gap);
+            text-align: center;
+        }
+
+        /* Insight callout */
+        .insight-callout {
+            background: var(--card-bg);
+            border-left: 3px solid var(--gold);
+            padding: clamp(0.5rem, 1.2vw, 1rem) clamp(0.75rem, 1.5vw, 1.25rem);
+            border-radius: 0 8px 8px 0;
+            margin-top: var(--content-gap);
+        }
+
+        .insight-callout p {
+            font-size: var(--body-size);
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .insight-callout .source {
+            font-size: var(--small-size);
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            font-style: normal;
+        }
+
+        /* ===========================================
+           RESPONSIVE BREAKPOINTS
+           =========================================== */
+        @media (max-height: 700px) {
+            :root {
+                --slide-padding: clamp(1rem, 3vw, 2.5rem);
+                --content-gap: clamp(0.4rem, 1.2vw, 0.9rem);
+                --title-size: clamp(1.5rem, 4.5vw, 2.75rem);
+                --h2-size: clamp(1.15rem, 2.8vw, 1.8rem);
+            }
+        }
+
+        @media (max-height: 600px) {
+            :root {
+                --slide-padding: clamp(0.75rem, 2.5vw, 1.5rem);
+                --content-gap: clamp(0.3rem, 1vw, 0.7rem);
+                --title-size: clamp(1.25rem, 4vw, 2.25rem);
+                --body-size: clamp(0.7rem, 1.1vw, 0.88rem);
+            }
+            .nav-dots, .bg-glow, .badge-watermark { display: none; }
+        }
+
+        @media (max-height: 500px) {
+            :root {
+                --slide-padding: clamp(0.5rem, 2vw, 1rem);
+                --title-size: clamp(1rem, 3.5vw, 1.6rem);
+                --h2-size: clamp(0.9rem, 2.5vw, 1.2rem);
+                --body-size: clamp(0.65rem, 1vw, 0.78rem);
+            }
+        }
+
+        @media (max-width: 600px) {
+            :root { --title-size: clamp(1.5rem, 7.5vw, 2.5rem); }
+            .metric-row { grid-template-columns: 1fr 1fr; }
+            .align-grid, .proposal-steps { grid-template-columns: 1fr; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.2s !important;
+            }
+            html { scroll-behavior: auto; }
+        }
+
+        /* ===========================================
+           JSO HEADER BAR
+           =========================================== */
+        .jso-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold), var(--navy), var(--gold));
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Navigation Dots -->
+    <nav class="nav-dots" id="navDots"></nav>
+
+    <!-- ==========================================
+         SLIDE 1: TITLE
+         ========================================== -->
+    <section class="slide" id="slide-1">
+        <div class="jso-header"></div>
+        <div class="bg-grid"></div>
+        <div class="bg-glow" style="width:500px;height:500px;background:rgba(0,45,114,0.3);top:-10%;left:-8%;"></div>
+        <div class="bg-glow" style="width:350px;height:350px;background:var(--gold-glow);bottom:-5%;right:-3%;"></div>
+        <div class="badge-watermark">
+            <!-- Shield shape watermark -->
+            <svg viewBox="0 0 200 240" fill="currentColor" style="color:var(--gold);">
+                <path d="M100 5 L190 50 L190 150 Q190 210 100 235 Q10 210 10 150 L10 50 Z" fill="none" stroke="currentColor" stroke-width="3"/>
+                <path d="M100 30 L170 65 L170 145 Q170 195 100 215 Q30 195 30 145 L30 65 Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+        </div>
+        <div class="slide-content" style="align-items:flex-start;">
+            <p class="slide-label reveal">Jacksonville Sheriff's Office</p>
+            <h1 class="reveal">Ebenezer Osei</h1>
+            <div class="divider reveal"></div>
+            <p class="reveal" style="font-size:var(--h3-size); color:var(--white); font-weight:500;">
+                I/O Psychology Research Analyst
+            </p>
+            <p class="reveal" style="margin-top:0.4rem; color:var(--text-muted); font-size:var(--body-size);">
+                MSc I/O Psychology · Applied Research · People Analytics · Psychometrics
+            </p>
+            <div class="tag-row reveal" style="margin-top:clamp(0.75rem,1.5vw,1.25rem);">
+                <span class="tag gold-tag">SPSS</span>
+                <span class="tag gold-tag">R</span>
+                <span class="tag gold-tag">Qualtrics</span>
+                <span class="tag">Python</span>
+                <span class="tag">Excel</span>
+                <span class="tag">Power BI</span>
+            </div>
+        </div>
+        <span class="slide-number">01 / 11</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 2: I KNOW YOUR CHALLENGES
+         ========================================== -->
+    <section class="slide" id="slide-2">
+        <div class="gold-stripe"></div>
+        <div class="bg-grid"></div>
+        <div class="slide-content">
+            <p class="slide-label reveal">I've Done My Homework</p>
+            <h2 class="reveal">JSO is at a <span class="gold">critical inflection point</span></h2>
+            <div class="metric-row">
+                <div class="metric-card gold-accent reveal-scale" style="transition-delay:0.15s;">
+                    <div class="metric-value alert-val">765</div>
+                    <div class="metric-label">Sworn officer deficit identified in the 2022 staffing assessment</div>
+                </div>
+                <div class="metric-card gold-accent reveal-scale" style="transition-delay:0.2s;">
+                    <div class="metric-value white-val">$100M+</div>
+                    <div class="metric-label">Invested in salary & pension increases via the 2024–2027 FOP contract</div>
+                </div>
+                <div class="metric-card gold-accent reveal-scale" style="transition-delay:0.25s;">
+                    <div class="metric-value">88%</div>
+                    <div class="metric-label">Increase in applications after pay restructuring (July 2024)</div>
+                </div>
+                <div class="metric-card gold-accent reveal-scale" style="transition-delay:0.3s;">
+                    <div class="metric-value white-val">450+</div>
+                    <div class="metric-label">Officers targeted for POWER wellness training over 5 years</div>
+                </div>
+            </div>
+            <div class="insight-callout reveal" style="transition-delay:0.4s;">
+                <p>"The investment is happening — now JSO needs the research infrastructure to measure whether it's working."</p>
+            </div>
+        </div>
+        <span class="slide-number">02 / 11</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 3: THE I/O OPPORTUNITY
+         ========================================== -->
+    <section class="slide" id="slide-3">
+        <div class="bg-grid"></div>
+        <div class="bg-glow" style="width:400px;height:400px;background:rgba(0,45,114,0.3);bottom:10%;right:5%;"></div>
+        <div class="slide-content">
+            <p class="slide-label reveal">The Opportunity</p>
+            <h2 class="reveal">Three areas where I/O research can <span class="gold">protect JSO's investment</span></h2>
+            <div class="align-grid" style="grid-template-columns:1fr 1fr 1fr;">
+                <div class="align-card reveal" style="transition-delay:0.15s; border-top:3px solid var(--gold);">
+                    <span class="label">Proposal 1</span>
+                    <span class="answer">Employee Engagement & Retention Analytics</span>
+                    <span class="proof">Are the pay raises actually reducing turnover? Which divisions still struggle?</span>
+                </div>
+                <div class="align-card reveal" style="transition-delay:0.22s; border-top:3px solid var(--gold);">
+                    <span class="label">Proposal 2</span>
+                    <span class="answer">Selection Validation & Adverse Impact Monitoring</span>
+                    <span class="proof">Does each selection stage meet legal standards? Where are diverse candidates screened out?</span>
+                </div>
+                <div class="align-card reveal" style="transition-delay:0.29s; border-top:3px solid var(--gold);">
+                    <span class="label">Proposal 3</span>
+                    <span class="answer">POWER Program Evaluation Partnership</span>
+                    <span class="proof">Longitudinal measurement of wellness outcomes as JSO scales to 450+ participants</span>
+                </div>
+            </div>
+            <div class="insight-callout reveal" style="transition-delay:0.38s;">
+                <p>Each proposal connects directly to the role's core functions: applied research, psychometrics, workload assessment, and outcomes reporting.</p>
+            </div>
+        </div>
+        <span class="slide-number">03 / 11</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 4: PROPOSAL 1 — ENGAGEMENT & RETENTION
+         ========================================== -->
+    <section class="slide" id="slide-4">
+        <div class="gold-stripe"></div>
+        <div class="bg-grid"></div>
+        <div class="slide-content">
+            <p class="slide-label reveal">Proposal 1</p>
+            <h2 class="reveal">Employee Engagement & <span class="gold">Retention Analytics</span></h2>
+            <p class="reveal" style="max-width:700px; margin-top:var(--element-gap);">JSO conducts biennial community surveys — but there's no publicly evident internal engagement measurement. With $100M+ invested in compensation, the agency needs data on whether it's working.</p>
+            <div class="proposal-card reveal-scale" style="transition-delay:0.25s;">
+                <h3>What I Would Build</h3>
+                <div class="proposal-steps">
+                    <div class="step">
+                        <span class="step-num">01</span>
+                        <span class="step-text">Design a validated engagement survey using the Job Descriptive Index & Organizational Climate Questionnaire — instruments already used in JSO's prior OJP-funded assessment</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">02</span>
+                        <span class="step-text">Segment analysis by division, rank, and tenure — with special focus on corrections (highest vacancy rates and burnout indicators)</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">03</span>
+                        <span class="step-text">Build a predictive attrition model to identify at-risk employees before they separate — enabling targeted retention interventions</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">04</span>
+                        <span class="step-text">Deliver quarterly outcomes reports to leadership with actionable recommendations and ROI tracking against the FOP contract investment</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">04 / 11</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 5: PROPOSAL 2 — SELECTION & ADVERSE IMPACT
+         ========================================== -->
+    <section class="slide" id="slide-5">
+        <div class="bg-grid"></div>
+        <div class="bg-glow" style="width:350px;height:350px;background:var(--gold-glow);top:5%;left:-5%;"></div>
+        <div class="slide-content">
+            <p class="slide-label reveal">Proposal 2</p>
+            <h2 class="reveal">Selection Validation & <span class="gold">Adverse Impact Analysis</span></h2>
+            <p class="reveal" style="max-width:700px; margin-top:var(--element-gap);">JSO's selection process spans 8+ stages. With Hispanic representation at 4.8% vs. 8.3% countywide, and NAACP scrutiny of leadership diversity, ongoing validation is essential for legal defensibility.</p>
+            <div class="proposal-card reveal-scale" style="transition-delay:0.25s;">
+                <h3>What I Would Build</h3>
+                <div class="proposal-steps">
+                    <div class="step">
+                        <span class="step-num">01</span>
+                        <span class="step-text">Conduct 4/5ths rule adverse impact analysis at each selection stage — written test, physical ability, oral board, polygraph, and psych evaluation</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">02</span>
+                        <span class="step-text">Identify where diverse candidates are disproportionately screened out and propose evidence-based remediation strategies</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">03</span>
+                        <span class="step-text">Validate selection instruments against on-the-job performance criteria: academy completion, FTO ratings, 1/3/5-year retention</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">04</span>
+                        <span class="step-text">Produce technical validation reports with criterion-related validity evidence to support legal compliance and EEO standards</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">05 / 11</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 6: PROPOSAL 3 — POWER EVALUATION
+         ========================================== -->
+    <section class="slide" id="slide-6">
+        <div class="gold-stripe"></div>
+        <div class="bg-grid"></div>
+        <div class="slide-content">
+            <p class="slide-label reveal">Proposal 3</p>
+            <h2 class="reveal">POWER Program <span class="gold">Evaluation Partnership</span></h2>
+            <p class="reveal" style="max-width:700px; margin-top:var(--element-gap);">JSO's POWER wellness initiative (Peace Officer Wellness, Empathy & Resilience) has UCLA-backed research showing improvements in mindfulness, emotion regulation, and decreased stress. As it scales to 450+ officers, JSO needs an in-house research partner.</p>
+            <div class="proposal-card reveal-scale" style="transition-delay:0.25s;">
+                <h3>What I Would Build</h3>
+                <div class="proposal-steps">
+                    <div class="step">
+                        <span class="step-num">01</span>
+                        <span class="step-text">Design pre/post psychometric measurement protocols using validated instruments — tracking mindfulness, burnout, stress, and resilience scales</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">02</span>
+                        <span class="step-text">Track longitudinal organizational outcomes: sick leave usage, use-of-force incidents, citizen complaints, retention rates — POWER participants vs. controls</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">03</span>
+                        <span class="step-text">Produce annual outcomes reports quantifying ROI to justify continued investment to leadership and external funders</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">04</span>
+                        <span class="step-text">Position JSO as a national model for evidence-based officer wellness — publishable findings for the Journal of Community Safety and Well-being</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">06 / 11</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 7: PROOF — I'VE DONE THIS BEFORE
+         ========================================== -->
+    <section class="slide" id="slide-7">
+        <div class="bg-grid"></div>
+        <div class="bg-glow" style="width:400px;height:400px;background:rgba(0,45,114,0.25);bottom:5%;right:5%;"></div>
+        <div class="slide-content">
+            <p class="slide-label reveal">Proof of Concept</p>
+            <h2 class="reveal">I've already solved this problem — <span class="gold">at scale</span></h2>
+            <p class="reveal" style="margin-top:var(--element-gap); max-width:680px;">At mPharma (500+ employees, 9 African countries), I faced the same challenge: high attrition, disengagement, and no research infrastructure. Here's what I built:</p>
+            <div class="align-grid reveal-scale" style="transition-delay:0.25s;">
+                <div class="align-card" style="border-left:3px solid var(--gold);">
+                    <span class="label">Research Design</span>
+                    <span class="answer">Mixed-method analysis of engagement surveys, exit interviews, and HRIS data across 9 countries</span>
+                </div>
+                <div class="align-card" style="border-left:3px solid var(--gold);">
+                    <span class="label">Predictive Analytics</span>
+                    <span class="answer">ML attrition model with SHAP interpretability identifying key separation drivers</span>
+                </div>
+                <div class="align-card" style="border-left:3px solid var(--gold);">
+                    <span class="label">Stakeholder Reporting</span>
+                    <span class="answer">Executive dashboards with actionable recommendations to country-level leadership</span>
+                </div>
+                <div class="align-card" style="border-left:3px solid var(--gold);">
+                    <span class="label">Measurable Outcome</span>
+                    <span class="answer" style="color:var(--gold);">40% attrition reduction · Engagement 68% → 79% · 80% reporting time savings</span>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">07 / 11</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 8: ROLE ALIGNMENT
+         ========================================== -->
+    <section class="slide" id="slide-8">
+        <div class="gold-stripe"></div>
+        <div class="bg-grid"></div>
+        <div class="slide-content">
+            <p class="slide-label reveal">Role Alignment</p>
+            <h2 class="reveal">What you need ↔ <span class="gold">What I've done</span></h2>
+            <div class="align-grid">
+                <div class="align-card reveal" style="transition-delay:0.12s;">
+                    <span class="label">Mixed Methodology Studies</span>
+                    <span class="answer">Quantitative thesis (n=135) with validated psychometric instruments, hierarchical regression</span>
+                    <span class="proof">IRB-compliant · Qualtrics · R · SPSS</span>
+                </div>
+                <div class="align-card reveal" style="transition-delay:0.17s;">
+                    <span class="label">Job Analysis & Assessment</span>
+                    <span class="answer">Task analyses to validate roles across 9 countries — SME focus groups, interviews, survey admin</span>
+                    <span class="proof">Competency modeling · Job family groupings</span>
+                </div>
+                <div class="align-card reveal" style="transition-delay:0.22s;">
+                    <span class="label">Statistical Analysis</span>
+                    <span class="answer">Factor analysis, reliability testing, regression, adverse impact calculations, chi-square, t-scores</span>
+                    <span class="proof">R · SPSS · Excel · Python</span>
+                </div>
+                <div class="align-card reveal" style="transition-delay:0.27s;">
+                    <span class="label">Workload Assessments & Reporting</span>
+                    <span class="answer">Workforce analytics frameworks with executive-ready dashboards and actionable recommendations</span>
+                    <span class="proof">Power BI · DAX · 80% time savings</span>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">08 / 11</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 9: RESEARCH & PSYCHOMETRICS
+         ========================================== -->
+    <section class="slide" id="slide-9">
+        <div class="bg-grid"></div>
+        <div class="slide-content">
+            <p class="slide-label reveal">Research & Psychometrics</p>
+            <h2 class="reveal">The full <span class="gold">methodological toolkit</span></h2>
+            <div class="two-col">
+                <div class="reveal" style="transition-delay:0.15s;">
+                    <div class="col-header"><span class="bar gold-bar"></span> Quantitative & Psychometric</div>
+                    <ul class="value-list">
+                        <li>Survey design & Qualtrics administration</li>
+                        <li>Scale construction & reliability testing (Cronbach's α)</li>
+                        <li>Factor analysis & item discrimination</li>
+                        <li>Hierarchical & multiple regression</li>
+                        <li>Adverse impact (4/5ths rule, chi-square, t-scores)</li>
+                        <li>Criterion & construct validity evidence</li>
+                    </ul>
+                </div>
+                <div class="reveal" style="transition-delay:0.25s;">
+                    <div class="col-header"><span class="bar gold-bar"></span> Qualitative & Applied</div>
+                    <ul class="value-list">
+                        <li>SME interviews & focus group facilitation</li>
+                        <li>Observational field research</li>
+                        <li>Job analysis (task-based & competency-based)</li>
+                        <li>Workload assessment design & interpretation</li>
+                        <li>Technical validation report writing</li>
+                        <li>Outcomes presentations to leadership</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">09 / 11</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 10: TECHNICAL TOOLS
+         ========================================== -->
+    <section class="slide" id="slide-10">
+        <div class="gold-stripe"></div>
+        <div class="bg-grid"></div>
+        <div class="slide-content">
+            <p class="slide-label reveal">Technical Proficiency</p>
+            <h2 class="reveal">Every tool the role <span class="gold">requires — and more</span></h2>
+            <div class="two-col">
+                <div class="reveal" style="transition-delay:0.15s;">
+                    <div class="col-header"><span class="bar gold-bar"></span> Core Statistical & Research</div>
+                    <ul class="value-list">
+                        <li><span class="gold">SPSS</span> — Scale construction, factor analysis, reliability, regression</li>
+                        <li><span class="gold">R</span> — Psychometrics, ggplot2, advanced modeling</li>
+                        <li><span class="gold">Excel</span> — Item analysis, scoring, adverse impact calculations</li>
+                        <li><span class="gold">Qualtrics</span> — Survey design, branching logic, data export</li>
+                    </ul>
+                </div>
+                <div class="reveal" style="transition-delay:0.25s;">
+                    <div class="col-header"><span class="bar gold-bar"></span> Analytics & Reporting</div>
+                    <ul class="value-list">
+                        <li><span class="gold">Python</span> — Data cleaning, ML models, automation</li>
+                        <li><span class="gold">Power BI</span> — Executive dashboards, DAX, workforce KPIs</li>
+                        <li><span class="gold">SQL</span> — Complex queries, HR database management</li>
+                        <li><span class="gold">Tableau</span> — Interactive storytelling & data visualization</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tag-row reveal" style="transition-delay:0.35s; margin-top:var(--content-gap);">
+                <span class="tag gold-tag">scikit-learn</span>
+                <span class="tag gold-tag">SHAP</span>
+                <span class="tag">pandas</span>
+                <span class="tag">ggplot2</span>
+                <span class="tag">Streamlit</span>
+                <span class="tag">HRIS/HCM Systems</span>
+            </div>
+        </div>
+        <span class="slide-number">10 / 11</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 11: CLOSING
+         ========================================== -->
+    <section class="slide" id="slide-11">
+        <div class="jso-header"></div>
+        <div class="bg-grid"></div>
+        <div class="bg-glow" style="width:500px;height:500px;background:rgba(0,45,114,0.25);top:-8%;right:-8%;"></div>
+        <div class="bg-glow" style="width:300px;height:300px;background:var(--gold-glow);bottom:10%;left:5%;"></div>
+        <div class="badge-watermark">
+            <svg viewBox="0 0 200 240" fill="currentColor" style="color:var(--gold);">
+                <path d="M100 5 L190 50 L190 150 Q190 210 100 235 Q10 210 10 150 L10 50 Z" fill="none" stroke="currentColor" stroke-width="3"/>
+                <path d="M100 30 L170 65 L170 145 Q170 195 100 215 Q30 195 30 145 L30 65 Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+        </div>
+        <div class="slide-content" style="align-items:center; text-align:center;">
+            <p class="slide-label reveal">Ready to Contribute on Day One</p>
+            <h2 class="reveal" style="max-width:780px;">
+                I bring the <span class="gold">research rigor</span>, applied I/O expertise, and data infrastructure experience JSO needs right now
+            </h2>
+            <div class="cta-box reveal" style="transition-delay:0.2s;">
+                <h3 style="color:var(--white);">Ebenezer Osei</h3>
+                <p style="margin-top:0.3rem; color:var(--text-secondary);">MSc I/O Psychology (4.0 GPA) · SHRM Member · 7+ Years Applied Research</p>
+                <div class="tag-row" style="justify-content:center; margin-top:clamp(0.5rem,1vw,0.85rem);">
+                    <span class="tag gold-tag">Job Analysis</span>
+                    <span class="tag gold-tag">Psychometrics</span>
+                    <span class="tag gold-tag">Selection Validation</span>
+                    <span class="tag gold-tag">Adverse Impact</span>
+                    <span class="tag gold-tag">Workload Assessment</span>
+                    <span class="tag gold-tag">Outcomes Reporting</span>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">11 / 11</span>
+    </section>
+
+    <!-- ==========================================
+       JAVASCRIPT
+       ========================================== -->
+    <script>
+        class SlidePresentation {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.progressBar = document.getElementById('progressBar');
+                this.navDotsContainer = document.getElementById('navDots');
+                this.currentSlide = 0;
+
+                this.createNavDots();
+                this.setupIntersectionObserver();
+                this.setupKeyboardNav();
+                this.setupScrollListener();
+            }
+
+            createNavDots() {
+                this.slides.forEach((_, i) => {
+                    const dot = document.createElement('button');
+                    dot.classList.add('nav-dot');
+                    if (i === 0) dot.classList.add('active');
+                    dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+                    dot.addEventListener('click', () => {
+                        this.slides[i].scrollIntoView({ behavior: 'smooth' });
+                    });
+                    this.navDotsContainer.appendChild(dot);
+                });
+                this.navDots = document.querySelectorAll('.nav-dot');
+            }
+
+            setupIntersectionObserver() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            const index = Array.from(this.slides).indexOf(entry.target);
+                            this.currentSlide = index;
+                            this.updateNavDots(index);
+                            this.updateProgress(index);
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                this.slides.forEach(slide => observer.observe(slide));
+            }
+
+            setupKeyboardNav() {
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+                        e.preventDefault();
+                        const next = Math.min(this.currentSlide + 1, this.slides.length - 1);
+                        this.slides[next].scrollIntoView({ behavior: 'smooth' });
+                    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        const prev = Math.max(this.currentSlide - 1, 0);
+                        this.slides[prev].scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            }
+
+            setupScrollListener() {
+                let ticking = false;
+                document.addEventListener('scroll', () => {
+                    if (!ticking) {
+                        requestAnimationFrame(() => {
+                            const scrollTop = window.scrollY;
+                            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                            const progress = maxScroll > 0 ? (scrollTop / maxScroll) * 100 : 0;
+                            this.progressBar.style.width = `${progress}%`;
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
+                });
+            }
+
+            updateNavDots(index) {
+                this.navDots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+            }
+
+            updateProgress(index) {
+                const progress = ((index + 1) / this.slides.length) * 100;
+                this.progressBar.style.width = `${progress}%`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new SlidePresentation();
+        });
+    </script>
+</body>
+</html>
